@@ -1,8 +1,8 @@
 const map = L.map('map').setView([48.208, 16.373], 12);
 
-const orthoLayers = ['lb', 'lb2019', 'lb2018', 'lb2017', 'lb2016', 'lb2015', 'lb2014', 'lb1956', 'lb1938'];
-const orthoStyle = ['farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'grau', 'grau'];
-const orthoLayerNames = ['2020', '2019', '2018', '2017', '2016', '2015', '2014', '1956', '1938'];
+const orthoLayers = ['lb', 'lb2019', 'lb2018', 'lb2017', 'lb2016', 'lb2015', 'lb2014', 'lb1992', 'lb1976', 'lb1956', 'lb1938'];
+const orthoStyle = ['farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'grau', 'grau', 'grau', 'grau'];
+const orthoLayerNames = ['2020', '2019', '2018', '2017', '2016', '2015', '2014', '1992', '1976', '1956', '1938'];
 
 
 const layers = orthoLayers.map((id, index) => L.tileLayer(
@@ -14,6 +14,8 @@ const layers = orthoLayers.map((id, index) => L.tileLayer(
 );
 
 let current = 0;
+let direction = 1;
+let bw = false;
 let active = [0, 5];
 if (location.hash.length > 1) {
     active = location.hash.substr(1).split(',').map(name => orthoLayerNames.indexOf(name));
@@ -26,8 +28,12 @@ function loop() {
         return;
     }
     layers[active[current]].setOpacity(0);
-    current = (current + 1) % active.length;
+    current = (current + direction) % active.length;
+	if (current < 0) {
+		current += active.length;
+	}
     layers[active[current]].setOpacity(1);
+	layers[active[current]].getContainer().classList[bw ? 'add' : 'remove']('grayscale');
     try {
         document.querySelector('.leaflet-control-layers-base > div.active').classList.remove('active');
     } catch (e) {};
@@ -40,6 +46,9 @@ requestAnimationFrame(loop);
 const layerControl = L.Control.extend({
     onAdd: map => {
         const container = L.DomUtil.create('div', 'leaflet-control-layers leaflet-control-layers-expanded');
+		container.style.overflow = 'auto';
+		container.style.maxHeight = '80vh';
+				
         const list = L.DomUtil.create('section', 'leaflet-control-layers-list', container);
         const base = L.DomUtil.create('div', 'leaflet-control-layers-base', list);
 
@@ -106,6 +115,54 @@ const layerControl = L.Control.extend({
             }
             clearInterval(loopInterval);
             loopInterval = setInterval(loop, e.target.value);
+        });
+
+        L.DomUtil.create('div', 'leaflet-control-layers-separator', list);
+        const directionBase = L.DomUtil.create('div', 'leaflet-control-layers-base', list);
+        [1, -1].forEach(direction => {
+            const div = L.DomUtil.create('div', '', directionBase);
+            const label = L.DomUtil.create('label', '', div);
+            const innerDiv = L.DomUtil.create('div', '', label);
+            const input = L.DomUtil.create('input', 'leaflet-control-layers-selector', innerDiv);
+            input.type = 'radio';
+            input.name = 'direction';
+            input.value = direction;
+            if (direction == 1) {
+                input.checked = true;
+            }
+            L.DomUtil.create('span', '', innerDiv).textContent = direction > 0 ? 'backward' : 'forward';
+        });
+
+        directionBase.addEventListener('change', e => {
+            const target = e.target;
+            if (!target.classList.contains('leaflet-control-layers-selector')) {
+                return;
+            }
+			direction = target.value > 0 ? 1 : -1;
+        });
+
+        L.DomUtil.create('div', 'leaflet-control-layers-separator', list);
+        const bwBase = L.DomUtil.create('div', 'leaflet-control-layers-base', list);
+        ['farbe', 'grau'].forEach(color => {
+            const div = L.DomUtil.create('div', '', bwBase);
+            const label = L.DomUtil.create('label', '', div);
+            const innerDiv = L.DomUtil.create('div', '', label);
+            const input = L.DomUtil.create('input', 'leaflet-control-layers-selector', innerDiv);
+            input.type = 'radio';
+            input.name = 'color';
+            input.value = color;
+            if (color == 'farbe') {
+                input.checked = true;
+            }
+            L.DomUtil.create('span', '', innerDiv).textContent = color;
+        });
+
+        bwBase.addEventListener('change', e => {
+            const target = e.target;
+            if (!target.classList.contains('leaflet-control-layers-selector')) {
+                return;
+            }
+			bw = target.value === 'grau';
         });
 
         return container;
