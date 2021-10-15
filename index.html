@@ -2,6 +2,7 @@
 <html><head>
     <meta charset="UTF-8" />
     <title>wien ortho compare</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
     crossorigin=""/>
@@ -16,11 +17,9 @@
    .leaflet-control-layers-base > div.active span {
        background: #ff0;
    }
-   /*
-   .gray .tileLayer .leaflet-tile {
-       filter: grayscale(1);
-   }
-   */
+   .grayscale {
+        filter: grayscale(1);
+    }
    </style>
 </head><body>
     <div id="map"></div>
