@@ -1,8 +1,8 @@
 const map = L.map('map').setView([48.208, 16.373], 12);
 
-const orthoLayers = ['lb', 'lb2019', 'lb2018', 'lb2017', 'lb2016', 'lb2015', 'lb2014', 'lb1992', 'lb1976', 'lb1956', 'lb1938'];
-const orthoStyle = ['farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'grau', 'grau', 'grau', 'grau'];
-const orthoLayerNames = ['2020', '2019', '2018', '2017', '2016', '2015', '2014', '1992', '1976', '1956', '1938'];
+const orthoLayers = ['lb', 'lb2020', 'lb2019', 'lb2018', 'lb2017', 'lb2016', 'lb2015', 'lb2014', 'lb1992', 'lb1976', 'lb1956', 'lb1938'];
+const orthoStyle = ['farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'grau', 'grau', 'grau', 'grau'];
+const orthoLayerNames = ['2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '1992', '1976', '1956', '1938'];
 
 
 const layers = orthoLayers.map((id, index) => L.tileLayer(
