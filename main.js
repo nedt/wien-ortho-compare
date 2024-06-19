@@ -1,9 +1,29 @@
 const map = L.map('map').setView([48.208, 16.373], 12);
 
-const orthoLayers = ['lb', 'lb2021', 'lb2020', 'lb2019', 'lb2018', 'lb2017', 'lb2016', 'lb2015', 'lb2014', 'lb1992', 'lb1976', 'lb1956', 'lb1938'];
-const orthoStyle = ['farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'farbe', 'grau', 'grau', 'grau', 'grau'];
-const orthoLayerNames = ['2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '1992', '1976', '1956', '1938'];
+const ortho = [
+    ['2023', 'lb', 'farbe'],
+    ['2022', 'lb2022', 'farbe'],
+    ['2021', 'lb2021', 'farbe'],
+    ['2020', 'lb2020', 'farbe'],
+    ['2019', 'lb2019', 'farbe'],
+    ['2018', 'lb2018', 'farbe'],
+    ['2017', 'lb2017', 'farbe'],
+    ['2016', 'lb2016', 'farbe'],
+    ['2015', 'lb2015', 'farbe'],
+    ['2014', 'lb2014', 'farbe'],
+    ['1992', 'lb1992', 'grau'],
+    ['1986', 'lb1986', 'grau'],
+    ['1981', 'lb1981', 'grau'],
+    ['1976', 'lb1976', 'grau'],
+    ['1971', 'lb1971', 'grau'],
+    ['1961', 'lb1961', 'grau'],
+    ['1956', 'lb1956', 'grau'],
+    ['1938', 'lb1938', 'grau'],
+];
 
+const orthoLayers     = ortho.map(_ => _[1]);
+const orthoStyle      = ortho.map(_ => _[2]);
+const orthoLayerNames = ortho.map(_ => _[0]);
 
 const layers = orthoLayers.map((id, index) => L.tileLayer(
     `https://{s}.wien.gv.at/wmts/${id}/${orthoStyle[index]}/google3857/{z}/{y}/{x}.jpeg`, {
